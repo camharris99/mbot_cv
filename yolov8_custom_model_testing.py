@@ -35,9 +35,12 @@ if (rpi):
 time.sleep(2)
 
 # load yolo model
-model=YOLO('example_model.pt') # You can change this to "best.pt" which you downloaded from the notebook!
+# You can change this to "best.pt" which you downloaded from the notebook!
+model=YOLO('example_model.pt')
 
 # load model classes
+# if your custom model has different classes, you can create a new text file
+# This new text file MUST be in the same order as the classes in "data.yaml" which you downloaded from RoboFlow!
 my_file = open("example_classes.txt", "r")
 data = my_file.read()
 class_list = data.split("\n")
