@@ -17,5 +17,13 @@ MBot Computer Vision Starter Code and Examples
       ![image](https://github.com/camharris99/mbot_cv/assets/122319358/e428483d-c5ca-4472-8494-da2458040325)<br />
 
       g. Repeat Step f for each cone in the image, for each image in the dataset.<br />
-      h. 
+      h. Once all images are annotated, under "Annotation", select "Add <#> Images to Dataset".<br />
+      i. Under "Generate", you can select some features to speed up training/add extra images without taking more pictures (augmentation). For this model, we used Pre-Processing steps of: Auto-Orient and Resize to 640 x 640. We augmented the dataset with an Image Level Blur. Once desired settings are chosen, hit "Create".<br />
+      j. Under "Versions", hit "Export Dataset", and download a zip file to your computer using the YoloV8 settings.<br />
+      ![image](https://github.com/camharris99/mbot_cv/assets/122319358/dc8305b5-7795-42ac-ae1f-d2d4adea7234)<br />
+   3. Verify your dataset is in the proper format for YoloV8.<br />
+      a. You should have a data.yaml file with the folder locations of Train, Test, and Validation, and the list of model Classes ("red_cone", "blue_cone", etc).<br />
+      b. There should also be 3 folders (Train, Test, Valid), each containing 2 subfolders: Images and Labels.<br />
+   4. 
+
    
