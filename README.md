@@ -24,6 +24,7 @@ MBot Computer Vision Starter Code and Examples
    3. Verify your dataset is in the proper format for YoloV8.<br />
       a. You should have a data.yaml file with the folder locations of Train, Test, and Validation, and the list of model Classes ("red_cone", "blue_cone", etc).<br />
       b. There should also be 3 folders (Train, Test, Valid), each containing 2 subfolders: Images and Labels.<br />
-   4. 
+   4. Upload your dataset zip folder to your Google Drive.<br />
+   5. Open the provided Jupyter Notebook in Google Colab and complete all of the cells. Don't forget the final step of downloading best.pt after training!
 
    
