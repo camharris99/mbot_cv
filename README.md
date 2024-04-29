@@ -1,7 +1,35 @@
 # mbot_cv
 MBot Computer Vision Starter Code and Examples
 ======
-## 1. Colored Cone Detection
+## 1. Required LCM Changes
+   We must create a new LCM message for publishing/subscribing. 
+   1. mbot_ws/mbot_lcm_base/mbot_lcm_serial/lcm_config.h
+      a. Add: #define MBOT_CONE_ARRAY_CHANNEL "MBOT_CONE_ARRAY"
+   2. mbot_ws/mbot_lcm_base/mbot_msgs/lcmtypes
+      a. Create: mbot_cone_array_t.lcm
+         i. package mbot_lcm_msgs;
+
+            struct mbot_cone_array_t
+            {
+               int64_t utime;
+               int32_t array_size;
+               mbot_cone_t detections[array_size]; 
+            }
+
+      b. Create: mbot_cone_t.lcm
+         i. package mbot_lcm_msgs;
+
+            struct mbot_cone_t
+            {
+               string color;
+               float range;
+               float heading;
+            }
+         
+   3. mbot_ws/mbot_lcm_base/mbot_msgs/CMakeLists.txt
+      a. To set(LCM_FILES ...) Add: lcmtypes/mbot_cone_t.lcm and lcmtypes/mbot_cone_array_t.lcm
+
+## 2. Colored Cone Detection
    Description: Here we train a custom Yolo-V8 model for detecting colored cones (this will theoretically work with any objects you want to detect!). We provide a starter model for you, but the model could be improved by training on more images (current model is trained on ~20 images).<br />
    Needs: Raspberry Pi or Jetson, Calibrated and Functioning MBot Camera, Google Colab, Python<br />
 
