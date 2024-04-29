@@ -2,10 +2,10 @@
 MBot Computer Vision Starter Code and Examples
 ======
 ## 1. Required LCM Changes
-   We must create a new LCM message for publishing/subscribing. 
-   1. mbot_ws/mbot_lcm_base/mbot_lcm_serial/lcm_config.h
+   We must create a new LCM message for publishing/subscribing. <br />
+   1. mbot_ws/mbot_lcm_base/mbot_lcm_serial/lcm_config.h<br />
       a. Add: #define MBOT_CONE_ARRAY_CHANNEL "MBOT_CONE_ARRAY"
-   2. mbot_ws/mbot_lcm_base/mbot_msgs/lcmtypes
+   2. mbot_ws/mbot_lcm_base/mbot_msgs/lcmtypes<br />
       a. Create: mbot_cone_array_t.lcm<br />
          i. package mbot_lcm_msgs;
 
