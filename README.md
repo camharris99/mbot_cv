@@ -2,11 +2,11 @@
 MBot Computer Vision Starter Code and Examples
 ======
 ## 1. Required LCM Changes
-   We must create a new LCM message for publishing/subscribing. 
-   1. mbot_ws/mbot_lcm_base/mbot_lcm_serial/lcm_config.h
+   We must create a new LCM message for publishing/subscribing. <br />
+   1. mbot_ws/mbot_lcm_base/mbot_lcm_serial/lcm_config.h<br />
       a. Add: #define MBOT_CONE_ARRAY_CHANNEL "MBOT_CONE_ARRAY"
-   2. mbot_ws/mbot_lcm_base/mbot_msgs/lcmtypes
-      a. Create: mbot_cone_array_t.lcm
+   2. mbot_ws/mbot_lcm_base/mbot_msgs/lcmtypes<br />
+      a. Create: mbot_cone_array_t.lcm<br />
          i. package mbot_lcm_msgs;
 
             struct mbot_cone_array_t
@@ -16,7 +16,7 @@ MBot Computer Vision Starter Code and Examples
                mbot_cone_t detections[array_size]; 
             }
 
-      b. Create: mbot_cone_t.lcm
+      b. Create: mbot_cone_t.lcm<br />
          i. package mbot_lcm_msgs;
 
             struct mbot_cone_t
@@ -26,7 +26,7 @@ MBot Computer Vision Starter Code and Examples
                float heading;
             }
          
-   3. mbot_ws/mbot_lcm_base/mbot_msgs/CMakeLists.txt
+   3. mbot_ws/mbot_lcm_base/mbot_msgs/CMakeLists.txt<br />
       a. To set(LCM_FILES ...) Add: lcmtypes/mbot_cone_t.lcm and lcmtypes/mbot_cone_array_t.lcm
 
 ## 2. Colored Cone Detection
