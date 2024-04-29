@@ -42,7 +42,7 @@ class Camera:
 
         # Load calibration data (must be calibrated, use "save_image_rpi5.py" with "camera_calibration.py")
         # Calibration data must be used in the same frame size as this script
-        calibration_data = np.load('cam_calibration_data.npz')
+        calibration_data = np.load('../cam_calibration_data.npz')
         self.camera_matrix = calibration_data['camera_matrix']
         self.dist_coeffs = calibration_data['dist_coeffs']
         self.new_camera_matrix, roi = cv2.getOptimalNewCameraMatrix(self.camera_matrix, self.dist_coeffs, (self.w, self.h), 1, (self.w, self.h))

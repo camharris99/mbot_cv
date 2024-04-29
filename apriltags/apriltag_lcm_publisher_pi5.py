@@ -37,7 +37,7 @@ class Camera:
         
         self.frame_count = 0
         self.detections = dict()
-        calibration_data = np.load('cam_calibration_data.npz')
+        calibration_data = np.load('../cam_calibration_data.npz')
         self.camera_matrix = calibration_data['camera_matrix']
         self.dist_coeffs = calibration_data['dist_coeffs']
         self.tag_size = 54              # in millimeter

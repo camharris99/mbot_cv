@@ -19,7 +19,7 @@ class Camera:
         self.w = width
         self.h = height
         config = self.cap.create_preview_configuration(main={"size": (self.w, self.h), "format": "RGB888"})
-        config["transform"] = libcamera.Transform(hflip=0, vflip=0)
+        config["transform"] = libcamera.Transform(hflip=1, vflip=1)
         self.cap.align_configuration(config)
         self.cap.configure(config)
         self.cap.start()
@@ -36,7 +36,7 @@ class Camera:
 
         self.frame_count = 0
         self.detections = dict()
-        calibration_data = np.load('cam_calibration_data.npz')
+        calibration_data = np.load('../cam_calibration_data.npz')
         self.camera_matrix = calibration_data['camera_matrix']
         self.fx = self.camera_matrix[0,0]
         self.fy = self.camera_matrix[1,1]
@@ -145,7 +145,7 @@ def video():
 
 if __name__ == '__main__':
     # image width and height here should align with save_image.py
-    camera_id = 1
+    camera_id = 0
     image_width = 1640
     image_height = 922
     camera = Camera(camera_id, image_width, image_height) 
