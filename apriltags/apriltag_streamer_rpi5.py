@@ -6,6 +6,9 @@ import time
 import atexit
 import numpy as np
 from dt_apriltags import Detector
+import math
+import lcm
+from mbot_lcm_msgs.twist2D_t import twist2D_t
 
 """
 This script displays the video live stream with apriltag detection to browser.
@@ -57,6 +60,7 @@ class Camera:
             [ self.small_tag_size/2, -self.small_tag_size/2, 0], # Bottom-right corner
             [-self.small_tag_size/2, -self.small_tag_size/2, 0], # Bottom-left corner
         ], dtype=np.float32)
+        self.lcm = lcm.LCM("udpm://239.255.76.67:7667?ttl=0")
 
     def generate_frames(self):
         while True:
@@ -79,6 +83,7 @@ class Camera:
                     else:
                         raise  # Re-raise the last exception if retries exhausted
 
+            prev_tvec = np.array([0,0,0])
             if self.detections:
                 visible_tags = 0
                 for detect in self.detections:
@@ -93,10 +98,15 @@ class Camera:
                     if detect.tag_id < 10: # big tag
                         image_points = np.array(detect.corners, dtype=np.float32)
                         retval, rvec, tvec = cv2.solvePnP(self.object_points, image_points, self.camera_matrix, self.dist_coeffs, flags=cv2.SOLVEPNP_IPPE_SQUARE)
+                        # print(tvec.shape)
+                        # print(tvec[0])
+                        self.publish_velocity_command(tvec[0], tvec[2])
 
                     if detect.tag_id >= 10: # small tag at center
                         image_points = np.array(detect.corners, dtype=np.float32)
                         retval, rvec, tvec = cv2.solvePnP(self.small_object_points, image_points, self.camera_matrix, self.dist_coeffs, flags=cv2.SOLVEPNP_IPPE_SQUARE)
+                        # print(tvec.shape)
+                        self.publish_velocity_command(tvec[0], tvec[2])
 
                     # Convert rotation vector to a rotation matrix
                     rotation_matrix, _ = cv2.Rodrigues(rvec)
@@ -104,19 +114,47 @@ class Camera:
                     # Calculate Euler angles 
                     roll, pitch, yaw = calculate_euler_angles_from_rotation_matrix(rotation_matrix)
 
+                    prev_tvec = tvec
                     pos_text = f"Tag ID {detect.tag_id}: x={tvec[0][0]:.2f}, y={tvec[1][0]:.2f}, z={tvec[2][0]:.2f},"
                     orientation_text = f" roll={roll:.2f}, pitch={pitch:.2f}, yaw={yaw:.2f}"
                     vertical_pos = 40*visible_tags
                     cv2.putText(frame, pos_text+orientation_text, (10, vertical_pos), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (220, 0, 0), 2)
 
+            # else:
+            #     prev_tvec = prev_tvec / 2
+            #     self.publish_velocity_command(prev_tvec[0], prev_tvec[2])
             # Encode the frame
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            
+
+    def publish_velocity_command(self, x, z):
+        k_p = 0.002
+        k_theta = 2.5
+        z_target = 200
+
+        theta = math.atan2(x,z)
+
+        wz = -k_theta * theta
+
+        if (z - z_target > 0):
+            vx = k_p * (z - z_target)
+        
+        else:
+            vx = 0
+
+        command = twist2D_t()
+        command.vx = vx
+        command.wz = wz
+
+        self.lcm.publish("MBOT_VEL_CMD", command.encode())
+
 
     def cleanup(self):
         print("Releasing camera resources")
+        self.publish_velocity_command(0,0)
         self.cap.stop()
 
 def calculate_euler_angles_from_rotation_matrix(R):
